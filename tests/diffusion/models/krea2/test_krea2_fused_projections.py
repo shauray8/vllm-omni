@@ -7,7 +7,7 @@ import torch.nn.functional as F
 
 from vllm_omni.diffusion.models.krea2.krea2_transformer import Krea2Transformer2DModel
 
-pytestmark = [pytest.mark.core_model, pytest.mark.diffusion, pytest.mark.cpu, pytest.mark.usefixtures("mock_tp1")]
+pytestmark = [pytest.mark.core_model, pytest.mark.diffusion, pytest.mark.cpu, pytest.mark.usefixtures("mock_tp")]
 
 _FUSED_TO_CHECKPOINT = {
     ".to_qkv.": (".to_q.", ".to_k.", ".to_v."),

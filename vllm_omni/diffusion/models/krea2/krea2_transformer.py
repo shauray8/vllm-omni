@@ -120,6 +120,7 @@ class Krea2Attention(nn.Module):
             quant_config=quant_config,
             prefix=_join_prefix(prefix, "to_qkv"),
             return_bias=False,
+            disable_tp=True,
         )
         self.to_gate = _linear(hidden_size, hidden_size, False, quant_config, _join_prefix(prefix, "to_gate"))
         self.norm_q = Krea2RMSNorm(self.head_dim, eps=eps)
@@ -179,6 +180,7 @@ class Krea2SwiGLU(nn.Module):
             quant_config=quant_config,
             prefix=_join_prefix(prefix, "gate_up_proj"),
             return_bias=False,
+            disable_tp=True,
         )
         self.act = SiluAndMul()
         self.down = _linear(hidden_dim, dim, False, quant_config, _join_prefix(prefix, "down"))

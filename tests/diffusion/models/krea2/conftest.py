@@ -4,13 +4,14 @@
 import pytest
 
 
-@pytest.fixture
-def mock_tp1(monkeypatch):
-    """Allow standalone linear-layer tests without a distributed process group."""
-    monkeypatch.setattr("vllm.model_executor.layers.linear.get_tensor_model_parallel_world_size", lambda: 1)
+@pytest.fixture(params=[1, 2], ids=["tp1", "tp2"])
+def mock_tp(monkeypatch, request):
+    """Allow standalone linear-layer tests without a distributed process group, as rank 0 of a TP group."""
+    world_size = request.param
+    monkeypatch.setattr("vllm.model_executor.layers.linear.get_tensor_model_parallel_world_size", lambda: world_size)
     monkeypatch.setattr("vllm.model_executor.layers.linear.get_tensor_model_parallel_rank", lambda: 0)
     monkeypatch.setattr("vllm.model_executor.parameter.get_tensor_model_parallel_rank", lambda: 0)
-    monkeypatch.setattr("vllm.model_executor.parameter.get_tensor_model_parallel_world_size", lambda: 1)
+    monkeypatch.setattr("vllm.model_executor.parameter.get_tensor_model_parallel_world_size", lambda: world_size)
 
 
 @pytest.fixture(autouse=True)
